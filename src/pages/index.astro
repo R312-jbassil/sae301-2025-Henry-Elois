@@ -1,11 +1,349 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const pb = Astro.locals.pb;
+
+let lunettesPopulaires = [];
+try {
+  lunettesPopulaires = await pb.collection("lunettes").getList(1, 3, {
+    sort: "-created",
+    expand: "id_client,id_materiau",
+  });
+} catch (error) {
+  console.error("Erreur lors de la récupération des lunettes:", error);
+}
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="TaVue - Configurateur de lunettes">
+  <section class="py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <div class="space-y-6">
+      <div
+        class="inline-flex items-center gap-2 text-sm text-gray-600 bg-base-200 px-4 py-2 rounded-full"
+      >
+        Fabrication française
+      </div>
+
+      <h1 class="text-5xl lg:text-6xl font-bold leading-tight">
+        Vos lunettes,<br />
+        <span class="text-gray-400">à votre image</span>
+      </h1>
+
+      <p class="text-lg text-gray-600 leading-relaxed">
+        Créez des lunettes uniques qui vous ressemblent.<br />
+        Design épuré, matériaux premium, savoir-faire français.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="/personnalisation" class="btn btn-primary btn-lg">
+          Personnaliser mes lunettes
+        </a>
+        <a
+          href="/generateur-ia"
+          class="btn btn-outline btn-lg border-black text-black hover:bg-black hover:text-white"
+        >
+          Tester le générateur IA
+        </a>
+      </div>
+    </div>
+    <div class="relative">
+      <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+        <img
+          src="/photo_hero.jpg"
+          alt="Femme portant des lunettes de soleil rondes"
+          class="w-full h-auto object-cover"
+        />
+      </div>
+    </div>
+    <div
+      class="absolute top-145 right-170 bg-base-200 rounded-3xl shadow-2xl p-6 max-w-sm"
+    >
+      <h3 class="font-bold text-lg mb-1">Offre de bienvenue</h3>
+      <p class="text-gray-600 text-sm">
+        -15% sur votre première paire personnalisée
+      </p>
+    </div>
+  </section>
+
+  <section class="py-16 bg-base-200 -mx-5 px-5">
+    <div class="max-w-screen-2xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">
+          TaVue, Opticien et créateur de lunettes de qualité
+        </h2>
+        <p class="text-lg text-gray-600">
+          Découvrez nos modèles phares et personnalisez les à votre goût !
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {
+          lunettesPopulaires.results && lunettesPopulaires.results.length > 0
+            ? lunettesPopulaires.results.map((lunette) => (
+                <div class="card bg-white shadow-lg">
+                  <figure class="px-10 pt-10">
+                    {lunette.code_svg ? (
+                      <div
+                        class="w-full h-48 flex items-center justify-center"
+                        set:html={lunette.code_svg}
+                      />
+                    ) : (
+                      <svg
+                        class="w-32 h-32"
+                        viewBox="0 0 200 80"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <rect
+                          x="10"
+                          y="20"
+                          width="70"
+                          height="40"
+                          rx="8"
+                          stroke="black"
+                          stroke-width="3"
+                          fill="none"
+                        />
+                        <rect
+                          x="120"
+                          y="20"
+                          width="70"
+                          height="40"
+                          rx="8"
+                          stroke="black"
+                          stroke-width="3"
+                          fill="none"
+                        />
+                        <line
+                          x1="80"
+                          y1="40"
+                          x2="120"
+                          y2="40"
+                          stroke="black"
+                          stroke-width="3"
+                        />
+                      </svg>
+                    )}
+                  </figure>
+                  <div class="card-body items-center text-center">
+                    <h3 class="card-title">
+                      {lunette.nom || "Lunettes de ville unisexe"}
+                    </h3>
+                    <p class="text-sm text-gray-600">
+                      {lunette.expand?.id_materiau?.libelle ||
+                        "Matériau premium"}
+                    </p>
+                    <div class="text-sm text-gray-500">
+                      {lunette.largeur_pont}mm - Verres {lunette.taille_verres}
+                      mm
+                    </div>
+                    <div class="card-actions mt-4">
+                      <a
+                        href={`/lunettes/${lunette.id}`}
+                        class="btn btn-primary"
+                      >
+                        Personnaliser
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))
+            : Array.from({ length: 3 }).map((_, i) => (
+                <div class="card bg-white shadow-lg">
+                  <figure class="px-10 pt-10">
+                    <svg
+                      class="w-32 h-32"
+                      viewBox="0 0 200 80"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <rect
+                        x="10"
+                        y="20"
+                        width="70"
+                        height="40"
+                        rx="8"
+                        stroke="black"
+                        stroke-width="3"
+                        fill="none"
+                      />
+                      <rect
+                        x="120"
+                        y="20"
+                        width="70"
+                        height="40"
+                        rx="8"
+                        stroke="black"
+                        stroke-width="3"
+                        fill="none"
+                      />
+                      <line
+                        x1="80"
+                        y1="40"
+                        x2="120"
+                        y2="40"
+                        stroke="black"
+                        stroke-width="3"
+                      />
+                    </svg>
+                  </figure>
+                  <div class="card-body items-center text-center">
+                    <h3 class="card-title">Lunettes de ville unisexe</h3>
+                    <p class="text-sm text-gray-600">À partir de 129€</p>
+                    <p class="text-sm text-gray-500">
+                      67 clients sont satisfaits de cette paire
+                    </p>
+                    <div class="card-actions mt-4">
+                      <a href="/personnalisation" class="btn btn-primary">
+                        Personnaliser
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16">
+    <div class="text-center mb-12">
+      <p class="text-sm text-gray-600 mb-2">EXPÉRIENCE UNIQUE</p>
+      <h2 class="text-4xl font-bold">Un configurateur intuitif</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div
+        class="bg-base-200 rounded-lg p-8 h-80 flex items-center justify-center"
+      >
+        <svg
+          class="w-48 h-48"
+          viewBox="0 0 200 80"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            x="10"
+            y="20"
+            width="70"
+            height="40"
+            rx="8"
+            stroke="black"
+            stroke-width="4"
+            fill="none"></rect>
+          <rect
+            x="120"
+            y="20"
+            width="70"
+            height="40"
+            rx="8"
+            stroke="black"
+            stroke-width="4"
+            fill="none"></rect>
+          <line x1="80" y1="40" x2="120" y2="40" stroke="black" stroke-width="4"
+          ></line>
+        </svg>
+      </div>
+      <div class="space-y-6">
+        <div class="flex items-start gap-4">
+          <div
+            class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center flex-shrink-0"
+          >
+            1
+          </div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">Choisissez votre style</h3>
+            <p class="text-gray-600">
+              Sélectionnez la forme, moderne, rétro ou vintage
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div
+            class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center flex-shrink-0"
+          >
+            2
+          </div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">Sélectionnez votre couleur</h3>
+            <p class="text-gray-600">
+              Plusieurs coloris disponibles uniformément
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div
+            class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center flex-shrink-0"
+          >
+            3
+          </div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">
+              Choisissez la taille de vos verres
+            </h3>
+            <p class="text-gray-600">
+              Différentes tailles disponibles à votre convenance
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-4">
+          <div
+            class="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center flex-shrink-0"
+          >
+            4
+          </div>
+          <div>
+            <h3 class="font-bold text-lg mb-1">
+              Définissez le style des branches
+            </h3>
+            <p class="text-gray-600">Classique, courbe ou flexible</p>
+          </div>
+        </div>
+        <a href="/personnalisation" class="btn btn-primary">
+          Commencer maintenant →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 bg-base-200 -mx-5 px-5">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-4xl font-bold mb-4">Nos avis</h2>
+      <p class="text-lg mb-8">+ 100 clients déjà satisfaits</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {
+          Array.from({ length: 4 }).map((_, i) => (
+            <div class="bg-white p-6 rounded-lg shadow">
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold">
+                  M
+                </div>
+                <span class="font-bold">Marie</span>
+              </div>
+              <div class="flex gap-1 mb-2">
+                {Array.from({ length: 5 }).map(() => (
+                  <span class="text-yellow-400">★</span>
+                ))}
+              </div>
+              <p class="text-sm text-gray-600">
+                Une paire de lunettes solide et personnalisable à mon image,
+                j'adore.
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16 text-center">
+    <h2 class="text-4xl font-bold mb-4">Prêt à créer vos lunettes ?</h2>
+    <p class="text-lg mb-8 text-gray-600">
+      Rejoignez des milliers de clients satisfaits qui ont choisi TaVue pour des
+      lunettes uniques et de qualité.
+    </p>
+    <a href="/personnalisation" class="btn btn-primary btn-lg">
+      Accéder au configurateur →
+    </a>
+  </section>
 </Layout>
