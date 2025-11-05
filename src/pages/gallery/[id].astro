@@ -1,0 +1,104 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+if (!Astro.locals.user) return Astro.redirect("/login");
+
+const pb = Astro.locals.pb;
+const { id } = Astro.params;
+
+let lunette = null;
+try {
+  lunette = await pb.collection('lunettes').getOne(id);
+  if (lunette.id_client !== Astro.locals.user.id) lunette = null;
+} catch (err) {
+  console.error('Erreur:', err);
+}
+---
+
+<Layout title={lunette?.nom || "Détail - TaVue"}>
+  {!lunette ? (
+    <div class="text-center py-20">
+      <p class="text-error text-lg">Lunette non trouvée</p>
+      <a href="/gallery" class="btn btn-primary mt-4">Retour à la galerie</a>
+    </div>
+  ) : (
+    <div class="max-w-6xl mx-auto py-8">
+      <a href="/gallery" class="btn btn-ghost gap-2 mb-4">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Retour à mes créations
+      </a>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="card bg-white shadow-lg p-6 border border-gray-200">
+          <div class="bg-gray-100 rounded p-8 flex items-center justify-center min-h-[350px] mb-4">
+            {lunette.code_svg ? (
+              <div set:html={lunette.code_svg} class="max-h-[300px]" />
+            ) : (
+              <p class="text-gray-400">Aucun SVG</p>
+            )}
+          </div>
+          <div class="grid grid-cols-2 gap-4 text-sm text-center">
+            <div><span class="block text-gray-600">Matière</span><span class="font-bold">Acétate</span></div>
+            <div><span class="block text-gray-600">Couleur</span><span class="font-bold">{lunette.couleur_lunettes}</span></div>
+            <div><span class="block text-gray-600">Verres</span><span class="font-bold">{lunette.taille_verres}mm</span></div>
+            <div><span class="block text-gray-600">Branches</span><span class="font-bold">Classic</span></div>
+          </div>
+          <p class="text-xs text-gray-500 text-center mt-4">Fabriqué en France</p>
+        </div>
+        <div class="space-y-6">
+          <div>
+            <h1 class="text-3xl font-bold">{lunette.nom}</h1>
+            <p class="text-2xl font-bold mt-2">289 € <span class="text-sm text-gray-500">TTC</span></p>
+          </div>
+
+          <p class="text-gray-700 leading-relaxed">
+            Lunettes personnalisées, fabriquées en France avec des matériaux premium. Chaque paire est assemblée à la main dans nos ateliers français.
+          </p>
+
+          <div class="space-y-3">
+            <h3 class="font-bold">Matière de la monture</h3>
+            <p class="text-sm text-gray-600">Titane - Ultra-léger, hypoallergénique et extrêmement résistant. C'est le choix premium pour une durabilité exceptionnelle.</p>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-bold">Couleur</h3>
+            <p class="text-sm">{lunette.couleur_lunettes}</p>
+          </div>
+
+          <div class="space-y-3">
+            <h3 class="font-bold">Caractéristiques</h3>
+            <ul class="text-sm space-y-1">
+              <li>✓ Fabrication française artisanale</li>
+              <li>✓ Garantie 2 ans</li>
+              <li>✓ Livraison offerte</li>
+              <li>✓ Etui et chiffon inclus</li>
+              <li>✓ Ajustements gratuits en boutique</li>
+            </ul>
+          </div>
+
+          <div class="space-y-2">
+            <button class="btn btn-primary w-full">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17" />
+              </svg>
+              Payer - 289 €
+            </button>
+            <button class="btn btn-ghost w-full">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C9.589 12.418 10 11.141 10 9.5 10 5.91 7.582 3 4.5 3S-1 5.91-1 9.5 1.582 16 4.5 16c.926 0 1.785-.165 2.592-.48m9.408-9.566c.16.355.25.714.25 1.096 0 1.506-.6 2.872-1.573 3.848m2.121-10.757A9 9 0 1021 12a9 9 0 00-9.343-8.983" />
+              </svg>
+              Partager
+            </button>
+          </div>
+
+          <div class="text-sm text-gray-600 space-y-1 border-t pt-4">
+            <p><strong>Délai de fabrication :</strong> 7 à 10 jours ouvrés</p>
+            <p><strong>Retours :</strong> 30 jours pour changer d'avis</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )}
+</Layout>
