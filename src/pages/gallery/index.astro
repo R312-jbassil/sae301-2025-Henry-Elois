@@ -1,0 +1,161 @@
+---
+import Layout from "../../layouts/Layout.astro";
+
+if (!Astro.locals.user) {
+  return Astro.redirect("/login");
+}
+
+const pb = Astro.locals.pb;
+const userId = Astro.locals.user.id;
+
+console.log("=== DEBUG GALERIE ===");
+console.log("User ID:", userId);
+
+let lunettes = [];
+try {
+  // D'abord, récupère TOUTES les lunettes
+  const toutesLunettes = await pb.collection('lunettes').getFullList({
+    sort: '-created'
+  });
+  console.log("Nombre total de lunettes:", toutesLunettes.length);
+  console.log("Toutes les lunettes:", toutesLunettes.map(l => ({ id: l.id, nom: l.nom, id_client: l.id_client })));
+
+  // Puis filtre par utilisateur
+  const result = await pb.collection('lunettes').getFullList({
+    sort: '-created',
+    filter: `id_client = "${userId}"`
+  });
+  console.log("Lunettes de cet utilisateur:", result.length);
+  console.log("Résultat du filtre:", result.map(l => ({ id: l.id, nom: l.nom, id_client: l.id_client })));
+  
+  lunettes = result;
+} catch (error) {
+  console.error(' Erreur récupération lunettes:', error);
+}
+console.log("=== FIN DEBUG ===");
+---
+<Layout title="Ma galerie de création - TaVue">
+  <div class="max-w-7xl mx-auto py-8">
+    <h1 class="text-4xl font-bold mb-2">Mes créations</h1>
+    <p class="text-gray-600 mb-8">{lunettes.length} création{lunettes.length > 1 ? 's' : ''}</p>
+
+    {lunettes.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {lunettes.map((lunette) => (
+          <div class="card bg-white shadow-lg hover:shadow-xl transition-shadow overflow-hidden border border-gray-200">
+            <!-- SVG Preview -->
+            <figure class="bg-base-200 p-6 min-h-[200px] flex items-center justify-center border-b">
+              {lunette.code_svg ? (
+                <div set:html={lunette.code_svg} class="max-h-[150px] max-w-full" />
+              ) : (
+                <div class="text-gray-400 text-sm">Aucun SVG</div>
+              )}
+            </figure>
+
+            <!-- Info Card -->
+            <div class="card-body p-4">
+              <h2 class="text-lg font-bold truncate">{lunette.nom || 'Sans titre'}</h2>
+              
+              <!-- Caractéristiques -->
+              <div class="grid grid-cols-2 gap-2 text-sm my-3 bg-gray-50 p-3 rounded">
+                <div>
+                  <span class="text-gray-600 text-xs">Matière</span>
+                  <p class="font-semibold text-gray-800">Acétate</p>
+                </div>
+                <div>
+                  <span class="text-gray-600 text-xs">Couleur</span>
+                  <p class="font-semibold text-gray-800">{lunette.couleur_lunettes || 'N/A'}</p>
+                </div>
+                <div>
+                  <span class="text-gray-600 text-xs">Verres</span>
+                  <p class="font-semibold text-gray-800">{lunette.taille_verres}mm</p>
+                </div>
+                <div>
+                  <span class="text-gray-600 text-xs">Pont</span>
+                  <p class="font-semibold text-gray-800">{lunette.largeur_pont}mm</p>
+                </div>
+              </div>
+
+              <!-- Date -->
+              <p class="text-xs text-gray-500 mb-2">
+                Créé le {new Date(lunette.created).toLocaleDateString('fr-FR')}
+              </p>
+
+              <!-- Badge IA -->
+              {lunette.genere_IA && (
+                <p class="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded text-center mb-2 w-full">
+                  ✨ Généré par IA
+                </p>
+              )}
+
+              <!-- Footer -->
+              <p class="text-xs text-gray-400 border-t pt-2 mb-3">
+                Fabriqué en France
+              </p>
+
+              <!-- Actions -->
+              <div class="flex gap-2">
+                <a href={`/lunettes/${lunette.id}`} class="btn btn-sm btn-primary flex-1 gap-2">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                  Voir
+                </a>
+                <button 
+                  class="btn btn-sm btn-ghost" 
+                  onclick={`handleDelete('${lunette.id}')`}
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="card bg-white shadow-lg p-12 text-center border border-gray-200">
+        <svg class="w-20 h-20 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M7 4L3 8m4-4l4 4m10-4v16m0 0l4-4m-4 4l-4-4" />
+        </svg>
+        <p class="text-gray-600 text-lg mb-6">Aucune création pour le moment</p>
+        <a href="/personnalisation" class="btn btn-primary">
+          Créer vos lunettes
+        </a>
+      </div>
+    )}
+
+    {lunettes.length > 0 && (
+      <div class="flex justify-center mt-8">
+        <a href="/personnalisation" class="btn btn-outline gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+          </svg>
+          Créer une nouvelle paire
+        </a>
+      </div>
+    )}
+  </div>
+
+  <script>
+    async function handleDelete(id) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer cette création ?')) {
+        try {
+          const res = await fetch(`/api2/deleteLunette?id=${id}`, {
+            method: 'DELETE'
+          });
+          
+          if (res.ok) {
+            alert('✅ Création supprimée !');
+            window.location.reload();
+          } else {
+            alert('❌ Erreur lors de la suppression');
+          }
+        } catch (error) {
+          alert('❌ Erreur réseau');
+        }
+      }
+    }
+  </script>
+</Layout>
