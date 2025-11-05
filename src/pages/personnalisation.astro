@@ -1,0 +1,381 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+
+const pb = Astro.locals.pb;
+let user = null;
+let materiaux = [];
+let couleurs = ["#000000", "#8B4513", "#E0E0E0", "#1E3A5F", "#556B2F"];
+try {
+  user = pb.authStore.model;
+  const result = await pb.collection("materiau").getList(1, 50);
+  materiaux = result.items;
+} catch (error) {
+  console.error("Erreur:", error);
+}
+const isConnected = !!user;
+
+---
+
+<Layout title="Créez vos lunettes - TaVue">
+  {isConnected ? (
+    <section class="py-8">
+      <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold mb-2">Créez vos lunettes</h1>
+        <p class="text-gray-600">
+          Personnalisez chaque détail de vos lunettes. Fabrication française, design épuré.
+        </p>
+      </div>
+
+      <div class="alert alert-info mb-8 flex items-center gap-2">
+        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>Connectez-vous pour sauvegarder vos créations et passer commande.</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-base-100 rounded-xl p-8 flex flex-col items-center justify-center shadow-xl border">
+          <img src="/lunettesbien.svg" alt="Aperçu lunettes personnalisées" class="w-full max-w-md drop-shadow-lg mb-6" />
+          <div class="text-sm text-gray-600 w-full">
+            <table class="table w-full">
+              <tbody>
+                <tr>
+                  <td class="font-bold">Matière</td>
+                  <td id="display-materiau">Acétate</td>
+                </tr>
+                <tr>
+                  <td class="font-bold">Couleur</td>
+                  <td id="display-couleur">Black</td>
+                </tr>
+                <tr>
+                  <td class="font-bold">Verres</td>
+                  <td id="display-verres">Clear</td>
+                </tr>
+                <tr>
+                  <td class="font-bold">Branches</td>
+                  <td id="display-branches">Classic</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="text-xs mt-2 text-center">Fabriqué en France</p>
+          </div>
+          <div class="form-control mt-6 w-full">
+            <label class="label font-bold text-lg" for="nom-creation">Nom de votre création</label>
+            <input type="text" id="nom-creation" placeholder="Ma création TaVue" class="input input-bordered w-full" />
+          </div>
+          <div class="flex flex-col gap-2 w-full mt-4">
+            <button id="btn-sauvegarder" class="btn btn-primary w-full">
+              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+              </svg>
+              Sauvegarder ma création
+            </button>
+            <button id="btn-acheter" class="btn btn-secondary w-full">Acheter les lunettes</button>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          ...existing code...
+        </div>
+      </div>
+    </section>
+  ) : (
+    <section class="py-16 text-center">
+      <div class="alert alert-error inline-block mx-auto">
+        <span>Vous devez être connecté pour personnaliser vos lunettes.</span>
+      </div>
+    </section>
+  )}
+</Layout>
+            placeholder="Ma création TaVue"
+            class="input input-bordered w-full"
+          />
+        </div>
+        <div class="flex flex-col gap-2 w-full mt-4">
+          <button id="btn-sauvegarder" class="btn btn-primary w-full">
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+              ></path>
+            </svg>
+            Sauvegarder ma création
+          </button>
+          <button id="btn-acheter" class="btn btn-secondary w-full"
+            >Acheter les lunettes</button
+          >
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div>
+          <h3 class="font-bold text-lg mb-4">Matière de la monture</h3>
+          <div class="space-y-3">
+            {
+              materiaux.map((materiau) => (
+                <label class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer hover:bg-base-300 transition">
+                  <input
+                    type="radio"
+                    name="materiau"
+                    value={materiau.id}
+                    class="radio radio-primary"
+                    data-libelle={materiau.libelle}
+                  />
+                  <div>
+                    <div class="font-bold">{materiau.libelle}</div>
+                    <div class="text-sm text-gray-600">Élégant et raffiné</div>
+                  </div>
+                </label>
+              ))
+            }
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-lg mb-4">Couleur de la monture</h3>
+          <div class="grid grid-cols-5 gap-3">
+            {
+              couleurs.map((couleur, index) => (
+                <label class="cursor-pointer">
+                  <input
+                    type="radio"
+                    name="couleur"
+                    value={couleur}
+                    class="hidden couleur-radio"
+                  />
+                  <div
+                    class="w-full aspect-square rounded-lg border-2 border-gray-300 hover:border-black transition"
+                    style={`background-color: ${couleur}`}
+                  />
+                </label>
+              ))
+            }
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-lg mb-4">Taille des verres</h3>
+          <div class="space-y-3">
+            <label
+              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
+            >
+              <input
+                type="radio"
+                name="taille-verres"
+                value="100"
+                class="radio radio-primary"
+              />
+              <div>5cm de diamètre</div>
+            </label>
+            <label
+              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
+            >
+              <input
+                type="radio"
+                name="taille-verres"
+                value="120"
+                class="radio radio-primary"
+                checked
+              />
+              <div>6cm de diamètre</div>
+            </label>
+            <label
+              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
+            >
+              <input
+                type="radio"
+                name="taille-verres"
+                value="140"
+                class="radio radio-primary"
+              />
+              <div>7cm de diamètre</div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="font-bold text-lg mb-4">Style des branches</h3>
+          <div class="space-y-3">
+            <label
+              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
+            >
+              <input
+                type="radio"
+                name="style-branches"
+                value="classic"
+                class="radio radio-primary"
+                checked
+              />
+              <div>
+                <div class="font-bold">Classique</div>
+                <div class="text-sm text-gray-600">Droit et épuré</div>
+              </div>
+            </label>
+            <label
+              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
+            >
+              <input
+                type="radio"
+                name="style-branches"
+                value="courbe"
+                class="radio radio-primary"
+              />
+              <div>
+                <div class="font-bold">Courbé</div>
+                <div class="text-sm text-gray-600">Ergonomique et moderne</div>
+              </div>
+            </label>
+            <label
+              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
+            >
+              <input
+                type="radio"
+                name="style-branches"
+                value="flexible"
+                class="radio radio-primary"
+              />
+              <div>
+                <div class="font-bold">Flexible</div>
+                <div class="text-sm text-gray-600">Confort maximal</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-lg mb-2"
+            >Nom de votre création</label
+          >
+          <input
+            type="text"
+            id="nom-creation"
+            placeholder="Ma création TaVue"
+            class="input input-bordered w-full"
+          />
+        </div>
+
+        <div class="flex gap-4">
+          <button id="btn-sauvegarder" class="btn btn-primary flex-1">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+              ></path>
+            </svg>
+            Sauvegarder ma création
+          </button>
+          <button id="btn-acheter" class="btn btn-secondary flex-1">
+            Acheter les lunettes
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Fonction pour mettre à jour le SVG
+    function updateSVG() {
+      const couleur =
+        document.querySelector('input[name="couleur"]:checked')?.value ||
+        "#000000";
+      const tailleVerres =
+        document.querySelector('input[name="taille-verres"]:checked')?.value ||
+        "120";
+      const styleBranches =
+        document.querySelector('input[name="style-branches"]:checked')?.value ||
+        "classic";
+      const materiau =
+        document.querySelector('input[name="materiau"]:checked')?.dataset
+          .libelle || "Acétate";
+
+      // Mettre à jour les couleurs
+      document
+        .querySelectorAll("#lunettes-svg rect, #lunettes-svg line")
+        .forEach((el) => {
+          el.setAttribute("stroke", couleur);
+        });
+
+      // Mettre à jour la taille des verres
+      const verreGauche = document.getElementById("verre-gauche");
+      const verreDroit = document.getElementById("verre-droit");
+      verreGauche.setAttribute("width", tailleVerres);
+      verreDroit.setAttribute("width", tailleVerres);
+
+      // Mettre à jour les branches selon le style
+      const brancheGauche = document.getElementById("branche-gauche");
+      const brancheDroite = document.getElementById("branche-droite");
+
+      if (styleBranches === "courbe") {
+        brancheGauche.setAttribute("d", "M40,75 Q25,75 10,85");
+        brancheDroite.setAttribute("d", "M360,75 Q375,75 390,85");
+      } else {
+        brancheGauche.setAttribute("x1", "40");
+        brancheDroite.setAttribute("x1", "360");
+      }
+
+      // Mettre à jour l'affichage des infos
+      document.getElementById("display-materiau").textContent = materiau;
+      document.getElementById("display-couleur").textContent = couleur;
+      document.getElementById("display-verres").textContent =
+        tailleVerres + "px";
+      document.getElementById("display-branches").textContent = styleBranches;
+    }
+
+    // Écouter les changements
+    document.querySelectorAll('input[type="radio"]').forEach((input) => {
+      input.addEventListener("change", updateSVG);
+    });
+
+    // Sauvegarder la création
+    document
+      .getElementById("btn-sauvegarder")
+      .addEventListener("click", async () => {
+        const svgElement = document.getElementById("lunettes-svg");
+        const svgCode = svgElement.outerHTML;
+        const nom = document.getElementById("nom-creation").value;
+
+        const data = {
+          nom: nom || "Ma création",
+          code_svg: svgCode,
+          couleur_lunettes: document.querySelector(
+            'input[name="couleur"]:checked'
+          )?.value,
+          taille_verres: document.querySelector(
+            'input[name="taille-verres"]:checked'
+          )?.value,
+          id_materiau: document.querySelector('input[name="materiau"]:checked')
+            ?.value,
+        };
+
+        try {
+          const response = await fetch("/api/saveSVG", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+
+          if (response.ok) {
+            alert("Création sauvegardée !");
+          }
+        } catch (error) {
+          console.error("Erreur:", error);
+          alert("Erreur lors de la sauvegarde");
+        }
+      });
+  </script>
+</Layout>
