@@ -1,0 +1,151 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const pageTitle = "À Propos de TaVue";
+const pageDescription = "Découvrez la vision, l'histoire et les valeurs de TaVue, opticien créateur de lunettes personnalisées.";
+
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <section class="relative min-h-[60vh] flex items-center justify-center bg-base-100">
+    <img src="/photo_hero.jpg" alt="Hero" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+    <div class="relative z-10 flex flex-col items-center justify-center py-24 px-4">
+      <h1 class="text-6xl md:text-7xl font-serif font-bold mb-6 tracking-tight text-gray-900 text-center drop-shadow-lg">TA VUE</h1>
+      <div class="text-lg md:text-2xl text-gray-700 font-light mb-4 text-center max-w-2xl mx-auto">
+        Guidée par la passion, la confiance et la vision.
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-16 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-2xl font-serif italic mb-4 text-gray-500">Notre vision</h2>
+      <p class="text-3xl md:text-4xl font-bold mb-6 text-gray-900">Je crois que chacun mérite de porter des lunettes définies non par des limites, mais par la vision.</p>
+      <p class="text-lg text-gray-700 mb-8">Chez TaVue, nous croyons en l'empowerment, la personnalisation et l'accompagnement pour que chaque client puisse exprimer sa personnalité à travers ses lunettes.</p>
+      <a href="#lets-begin" class="btn btn-primary btn-lg">En savoir plus</a>
+    </div>
+  </section>
+
+  <section id="lets-begin" class="bg-base-100 py-16 px-4">
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h2 class="text-4xl font-serif font-bold mb-6 text-pink-400 tracking-tight">LET'S BEGIN</h2>
+        <h3 class="text-xl font-bold mb-4 text-gray-900">Vous êtes au bon endroit. Nous sommes là pour vous accompagner.</h3>
+        <p class="text-gray-700 mb-6">Notre équipe vous guide à chaque étape pour créer des lunettes qui vous ressemblent vraiment.</p>
+        <div class="bg-base-200 rounded-xl p-6 mb-6">
+          <h4 class="font-serif italic text-lg mb-3 text-gray-700">Vous hésitez sur...</h4>
+          <ul class="space-y-2 text-gray-600">
+            <li class="flex items-center gap-2"><span class="text-pink-400">&#10003;</span> Le style qui vous correspond</li>
+            <li class="flex items-center gap-2"><span class="text-pink-400">&#10003;</span> La couleur idéale</li>
+            <li class="flex items-center gap-2"><span class="text-pink-400">&#10003;</span> La taille des verres adaptée</li>
+            <li class="flex items-center gap-2"><span class="text-pink-400">&#10003;</span> Le confort et la durabilité</li>
+          </ul>
+        </div>
+      </div>
+      <div class="flex flex-col items-center">
+        <img src="/photo_hero.jpg" alt="Portrait" class="w-72 h-72 object-cover rounded-2xl shadow-lg mb-4" />
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-white py-10 px-4">
+    <div class="max-w-3xl mx-auto text-center">
+      <blockquote class="text-2xl italic text-gray-700 mb-6">“Travailler avec TaVue m'a permis d'oser affirmer mon style. Aujourd'hui, je porte mes lunettes avec confiance et fierté.”</blockquote>
+      <div class="flex flex-col items-center gap-2">
+        <img src="/portrait-young-woman.jpg" alt="Témoignage client" class="w-20 h-20 rounded-full object-cover shadow" />
+        <span class="font-bold text-gray-900">Julie, cliente TaVue</span>
+      </div>
+    </div>
+  </section>
+  <section class="py-15 px-5 max-w-6xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="space-y-6">
+        <h2 class="text-4xl font-bold">Notre Histoire</h2>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          TaVue est née d'une vision simple : <strong
+            >rendre la création de lunettes personnalisées accessible à tous</strong
+          >. Nous croyons que vos lunettes doivent vous ressembler, refléter
+          votre personnalité et vos goûts.
+        </p>
+        <p class="text-lg text-gray-700 leading-relaxed">
+          Fondée par des passionnés d'optique et de design, TaVue combine la
+          tradition française de l'artisanat avec les technologies modernes pour
+          offrir une expérience unique.
+        </p>
+      </div>
+      <div
+        class="rounded-3xl p-12 h-100 flex items-center justify-center"
+      >
+        <img
+          src="/glasses-with-slightly-rounded-frame.jpg"
+          alt="Atelier de fabrication"
+          class="w-full h-full object-cover rounded-2xl shadow-lg"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="py-20 px-5 max-w-6xl mx-auto">
+    <h2 class="text-4xl font-bold text-center mb-16">Nos Valeurs</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div class="space-y-4">
+        <h3 class="text-2xl font-bold flex items-center gap-3">
+          <span class="badge badge-lg bg-black text-white">1</span>
+          Innovation
+        </h3>
+        <p class="text-gray-700 leading-relaxed">
+          Nous investissons constamment dans les technologies les plus modernes
+          pour offrir la meilleure expérience de personnalisation possible.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-2xl font-bold flex items-center gap-3">
+          <span class="badge badge-lg bg-black text-white">2</span>
+          Durabilité
+        </h3>
+        <p class="text-gray-700 leading-relaxed">
+          Nos matériaux sont écologiques et nos processus de fabrication
+          respectent l'environnement pour un avenir meilleur.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-2xl font-bold flex items-center gap-3">
+          <span class="badge badge-lg bg-black text-white">3</span>
+          Service Client
+        </h3>
+        <p class="text-gray-700 leading-relaxed">
+          Votre satisfaction est notre priorité. Notre équipe est disponible
+          pour vous accompagner à chaque étape.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <h3 class="text-2xl font-bold flex items-center gap-3">
+          <span class="badge badge-lg bg-black text-white">4</span>
+          Accessibilité
+        </h3>
+        <p class="text-gray-700 leading-relaxed">
+          Des prix justes et une qualité exceptionnelle pour que chacun puisse
+          porter des lunettes qui lui ressemblent vraiment.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="py-20 text-center px-5">
+    <h2 class="text-4xl font-bold mb-4 text-primary">
+      Prêt à rejoindre l'aventure ?
+    </h2>
+    <p class="text-lg text-gray-600 mb-8">
+      Créez vos lunettes personnalisées et rejoignez nos clients satisfaits !
+    </p>
+    <a
+      href="/personnalisation"
+      class="btn btn-primary btn-lg shadow-lg hover:scale-105 transition-transform duration-200"
+    >
+      Commencer maintenant →
+    </a>
+  </section>
+</Layout>
