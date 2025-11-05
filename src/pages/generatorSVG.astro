@@ -1,0 +1,376 @@
+---
+import Layout from "../layouts/Layout.astro";
+if (!Astro.locals.user) {
+  return Astro.redirect("/login");
+}
+---
+
+<Layout title="Créez avec l'IA - TaVue">
+  <div class="max-w-7xl mx-auto py-8">
+    <div class="text-center mb-8">
+      <div
+        class="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-full mb-4"
+      >
+        <svg
+          class="w-5 h-5 text-purple-600"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+        <span class="text-sm font-semibold text-purple-600"
+          >Génération par Intelligence Artificielle</span
+        >
+      </div>
+      <h1 class="text-4xl font-bold mb-2">Créez avec l'IA</h1>
+      <p class="text-gray-600">
+        Décrivez vos lunettes idéales et laissez notre IA générer des designs
+        personnalisés pour vous.
+      </p>
+    </div>
+
+    <div class="bg-base-200 rounded-lg p-4 mb-8 flex items-start gap-2">
+      <svg
+        class="w-5 h-5 text-info flex-shrink-0 mt-0.5"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <p class="text-sm text-gray-600">
+        Connectez-vous pour sauvegarder vos designs générés par l'IA.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+
+      <div class="card bg-white shadow-xl p-8 min-h-[400px] flex flex-col">
+        <h3 class="text-lg font-bold mb-4">Aperçu du design</h3>
+        <div
+          id="svg-output"
+          class="flex-1 flex items-center justify-center bg-base-200 rounded-lg"
+        >
+          <div class="text-center text-gray-400">
+            <svg
+              class="w-20 h-20 mx-auto mb-2 opacity-50"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <p class="text-sm">Aucun design généré</p>
+            <p class="text-xs">Décrivez vos lunettes idéales pour commencer</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zone du code SVG -->
+      <div class="card bg-white shadow-xl p-8 min-h-[400px] flex flex-col">
+        <h3 class="text-lg font-bold mb-4">Code SVG</h3>
+        <pre
+          id="svg-code"
+          class="flex-1 bg-base-300 p-4 rounded-lg overflow-auto text-xs">
+Aucun code généré
+        </pre>
+      </div>
+    </div>
+
+    <!-- Formulaire de prompt -->
+    <div class="card bg-white shadow-xl p-6 mb-8">
+      <h3 class="font-bold text-lg mb-4">
+        <span id="step-indicator">ÉTAPE 1 / 2</span> - Décrivez vos lunettes
+      </h3>
+      <p class="text-sm text-gray-600 mb-4">
+        Soyez aussi précis ou créatif que vous le souhaitez
+      </p>
+
+      <form id="prompt-form" class="space-y-4">
+        <textarea
+          id="prompt"
+          name="prompt"
+          required
+          placeholder="Ex: Des lunettes élégantes et minimalistes avec une monture fine en métal noir, parfaites pour le bureau..."
+          class="textarea textarea-bordered w-full h-32 resize-none"
+          maxlength="500"></textarea>
+        <div class="text-xs text-gray-500 text-right" id="char-counter">
+          0 / 500
+        </div>
+
+        <div class="flex gap-4">
+          <button
+            id="generate-button"
+            type="submit"
+            class="btn btn-primary flex-1"
+          >
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            Générer des designs
+          </button>
+          <button
+            id="edit-button"
+            type="button"
+            class="btn btn-secondary"
+            disabled
+          >
+            Modifier
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Sauvegarde -->
+    <div class="card bg-white shadow-xl p-6">
+      <h3 class="font-bold text-lg mb-4">Sauvegardez votre création</h3>
+      <div class="flex gap-4">
+        <input
+          type="text"
+          id="svg-name"
+          placeholder="Nom de votre création (ex: Lunettes Vintage)"
+          class="input input-bordered flex-1"
+          maxlength="50"
+        />
+        <button id="save-button" class="btn btn-secondary" disabled>
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+            ></path>
+          </svg>
+          Sauvegarder
+        </button>
+      </div>
+      <p id="save-status" class="text-sm mt-2"></p>
+    </div>
+  </div>
+
+  <script>
+    let promptList: Array<{ role: string; content: string }> = [];
+    const generateButton = document.getElementById(
+      "generate-button"
+    ) as HTMLButtonElement;
+    const editButton = document.getElementById(
+      "edit-button"
+    ) as HTMLButtonElement;
+    const saveButton = document.getElementById(
+      "save-button"
+    ) as HTMLButtonElement;
+    const svgOutput = document.getElementById("svg-output") as HTMLDivElement;
+    const svgCode = document.getElementById("svg-code") as HTMLPreElement;
+    const promptElement = document.getElementById(
+      "prompt"
+    ) as HTMLTextAreaElement;
+    const svgNameInput = document.getElementById(
+      "svg-name"
+    ) as HTMLInputElement;
+    const saveStatus = document.getElementById(
+      "save-status"
+    ) as HTMLParagraphElement;
+    const charCounter = document.getElementById(
+      "char-counter"
+    ) as HTMLDivElement;
+    const stepIndicator = document.getElementById(
+      "step-indicator"
+    ) as HTMLSpanElement;
+
+    // Compteur de caractères
+    promptElement?.addEventListener("input", () => {
+      const length = promptElement.value.length;
+      charCounter.textContent = `${length} / 500`;
+    });
+
+    async function generateSVG(
+      messages: Array<{ role: string; content: string }>
+    ) {
+      const res = await fetch("/api2/generateSVG", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Erreur lors de la génération");
+      }
+
+      const data = await res.json();
+      return data.svg;
+    }
+
+    async function handleSubmit(e: Event) {
+      e.preventDefault();
+      const prompt = promptElement.value.trim();
+
+      if (!prompt) return;
+
+      promptList = [];
+      promptList.push({ role: "user", content: prompt });
+
+      svgOutput.innerHTML = `
+        <div class="text-center">
+          <span class="loading loading-ring loading-xl text-primary"></span>
+          <p class="mt-4 text-sm text-gray-600">Génération en cours...</p>
+        </div>
+      `;
+
+      generateButton.disabled = true;
+      generateButton.innerHTML = `
+        <span class="loading loading-spinner loading-sm mr-2"></span>
+        Génération...
+      `;
+
+      try {
+        const aiResponse = await generateSVG(promptList);
+        const svgMatch = aiResponse.match(/<svg[\s\S]*?<\/svg>/i);
+        const svgContent = svgMatch ? svgMatch[0] : "";
+
+        if (!svgContent) {
+          throw new Error("Aucun SVG trouvé dans la réponse");
+        }
+
+        promptList.push({ role: "assistant", content: svgContent });
+
+        svgOutput.innerHTML = svgContent;
+        svgCode.textContent = svgContent;
+
+        editButton.disabled = false;
+        saveButton.disabled = false;
+        stepIndicator.textContent = "ÉTAPE 2 / 2";
+      } catch (error) {
+        console.error("Erreur:", error);
+        svgOutput.innerHTML = `
+          <div class="text-center text-error">
+            <svg class="w-16 h-16 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p>Erreur lors de la génération</p>
+            <p class="text-sm">Réessayez avec une description différente</p>
+          </div>
+        `;
+      } finally {
+        generateButton.disabled = false;
+        generateButton.innerHTML = `
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Générer des designs
+        `;
+      }
+    }
+
+    async function handleEdit() {
+      const prompt = promptElement.value.trim();
+      if (!prompt) return;
+
+      promptList.push({ role: "user", content: prompt });
+
+      svgOutput.innerHTML += `<span class="loading loading-ring loading-xl"></span>`;
+      generateButton.disabled = true;
+      editButton.disabled = true;
+
+      try {
+        const aiResponse = await generateSVG(promptList);
+        const svgMatch = aiResponse.match(/<svg[\s\S]*?<\/svg>/i);
+        const svgContent = svgMatch ? svgMatch[0] : "";
+
+        promptList.push({ role: "assistant", content: svgContent });
+
+        svgOutput.innerHTML = svgContent;
+        svgCode.textContent = svgContent;
+      } catch (error) {
+        console.error("Erreur:", error);
+        alert("Erreur lors de la modification");
+      } finally {
+        generateButton.disabled = false;
+        editButton.disabled = false;
+      }
+    }
+
+    async function handleSave() {
+      const name = svgNameInput.value.trim();
+      const svgContent = svgCode.textContent?.trim();
+
+      if (!name) {
+        saveStatus.textContent = "❌ Veuillez entrer un nom";
+        saveStatus.className = "text-sm mt-2 text-error";
+        return;
+      }
+
+      if (!svgContent || svgContent === "Aucun code généré") {
+        saveStatus.textContent = "❌ Aucun SVG à sauvegarder";
+        saveStatus.className = "text-sm mt-2 text-error";
+        return;
+      }
+
+      saveButton.disabled = true;
+      saveStatus.textContent = "Sauvegarde en cours...";
+      saveStatus.className = "text-sm mt-2 text-info";
+
+      try {
+        const res = await fetch("/api2/saveSVG", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            nom: name,
+            code_svg: svgContent,
+            chat_history: JSON.stringify(promptList),
+            genere_IA: true,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          saveStatus.textContent = "✅ SVG sauvegardé avec succès !";
+          saveStatus.className = "text-sm mt-2 text-success";
+          setTimeout(() => {
+            window.location.href = "/galerie";
+          }, 1500);
+        } else {
+          throw new Error(data.error);
+        }
+      } catch (error) {
+        console.error("Erreur:", error);
+        saveStatus.textContent = "❌ Erreur lors de la sauvegarde";
+        saveStatus.className = "text-sm mt-2 text-error";
+        saveButton.disabled = false;
+      }
+    }
+
+    document
+      .getElementById("prompt-form")
+      ?.addEventListener("submit", handleSubmit);
+    editButton?.addEventListener("click", handleEdit);
+    saveButton?.addEventListener("click", handleSave);
+  </script>
+</Layout>

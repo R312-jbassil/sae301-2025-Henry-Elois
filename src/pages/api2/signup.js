@@ -1,53 +1,68 @@
-import pb from "../../utils/pb";
-import { Collections } from "../../utils/pocketbase-types";
-
-export const POST = async ({ request, cookies }) => {
+export const POST = async ({ request, locals }) => {
   try {
-    // Récupération des infos envoyées depuis le formulaire
-    const { email, password, passwordConfirm } = await request.json();
-
-    // Vérifie que les deux mots de passe sont identiques
+    const { name, email, password, passwordConfirm } = await request.json();
     if (password !== passwordConfirm) {
       return new Response(
-        JSON.stringify({ error: "Les mots de passe ne correspondent pas." }),
-        { status: 400 }
+        JSON.stringify({
+          success: false,
+          error: "Les mots de passe ne correspondent pas.",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
 
-    // Crée un nouvel utilisateur dans PocketBase
-    const newUser = await pb.collection(Collections.Users).create({
+    if (password.length < 8) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: "Le mot de passe doit contenir au moins 8 caractères.",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+    const pb = locals.pb;
+    const newUser = await pb.collection("users").create({
+      name,
       email,
       password,
       passwordConfirm,
+      emailVisibility: true, 
     });
-
-    // Connecte immédiatement l'utilisateur après inscription
     const authData = await pb
-      .collection(Collections.Users)
+      .collection("users")
       .authWithPassword(email, password);
 
-    // Enregistre le token d'authentification dans un cookie sécurisé
-    cookies.set("pb_auth", pb.authStore.exportToCookie(), {
-      path: "/",
-      httpOnly: true,
-      sameSite: "strict",
-      expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 an
-    });
-
-    // Retourne les infos du nouvel utilisateur
-    return new Response(JSON.stringify({ user: authData.record }), {
-      status: 200,
-    });
-  } catch (err) {
-    console.error("Erreur d'inscription :", err);
     return new Response(
       JSON.stringify({
-        error:
-          err?.data?.message ||
-          err?.message ||
-          "Une erreur est survenue lors de l'inscription.",
+        success: true,
+        user: authData.record,
       }),
-      { status: 400 }
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+  } catch (err) {
+    console.error("Erreur d'inscription :", err);
+    let errorMessage = "Une erreur est survenue lors de l'inscription.";
+
+    if (err?.data?.data?.email) {
+      errorMessage = "Cet email est déjà utilisé.";
+    } else if (err?.data?.message) {
+      errorMessage = err.data.message;
+    } else if (err?.message) {
+      errorMessage = err.message;
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: errorMessage,
+      }),
+      {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   }
 };

@@ -6,6 +6,9 @@ interface Props {
 }
 
 const { title } = Astro.props;
+
+const user = Astro.locals.user;
+const isAuthenticated = !!user;
 ---
 
 <!doctype html>
@@ -21,55 +24,50 @@ const { title } = Astro.props;
       <nav class="flex items-center justify-between max-w-screen-2xl mx-auto">
         <div class="flex items-center gap-8">
           <a href="/" class="flex items-center gap-2">
-            <img
-              src="/logo.jpg"
-              alt="TaVue logo"
-              class=" object-cover"
-            />
+            <img src="/logo.jpg" alt="TaVue logo" class="object-cover h-10" />
           </a>
           <div class="hidden md:flex gap-6">
-            <a href="/personnalisation" class="text-black hover:underline"
-              >Personnalisation</a
-            >
-            <a href="/galerie" class="text-black hover:underline"
-              >Ma galerie de création</a
-            >
-            <a href="/generateur" class="text-black hover:underline"
-              >Générer avec une IA
+            <a href="/personnalisation" class="text-black hover:underline">
+              Personnalisation
             </a>
+            {
+              isAuthenticated && (
+                <>
+                  <a href="/galerie" class="text-black hover:underline">
+                    Ma galerie de création
+                  </a>
+                  <a href="/generateur" class="text-black hover:underline">
+                    Générer avec une IA
+                  </a>
+                </>
+              )
+            }
           </div>
         </div>
         <div class="flex items-center gap-4">
-          <button class="p-2">
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-            </svg>
-          </button>
-          <button class="p-2">
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              ></path>
-            </svg>
-          </button>
-          <button class="btn btn-primary px-6">Déconnexion</button>
+          {
+            isAuthenticated ? (
+              <>
+                <span class="text-sm hidden md:block">
+                  Bonjour, {user.name || user.email}
+                </span>
+                <form method="post" action="/api2/logout">
+                  <button type="submit" class="btn btn-primary px-6">
+                    Déconnexion
+                  </button>
+                </form>
+              </>
+            ) : (
+              <>
+                <a href="/login" class="btn btn-outline">
+                  Se connecter
+                </a>
+                <a href="/signup" class="btn btn-primary">
+                  S'inscrire
+                </a>
+              </>
+            )
+          }
         </div>
       </nav>
     </header>
@@ -85,9 +83,9 @@ const { title } = Astro.props;
             <h3 class="font-bold mb-4">Accueil</h3>
             <ul class="space-y-2 text-sm">
               <li>
-                <a href="/personnalisation" class="hover:underline"
-                  >Personnalisation</a
-                >
+                <a href="/personnalisation" class="hover:underline">
+                  Personnalisation
+                </a>
               </li>
               <li><a href="/apropos" class="hover:underline">À propos</a></li>
               <li>
@@ -106,19 +104,19 @@ const { title } = Astro.props;
             <h3 class="font-bold mb-4">Mentions légales</h3>
             <ul class="space-y-2 text-sm">
               <li>
-                <a href="/politique-confidentialite" class="hover:underline"
-                  >Politique de confidentialité</a
-                >
+                <a href="/politique-confidentialite" class="hover:underline">
+                  Politique de confidentialité
+                </a>
               </li>
               <li>
-                <a href="/mentions-legales" class="hover:underline"
-                  >Mentions légales</a
-                >
+                <a href="/mentions-legales" class="hover:underline">
+                  Mentions légales
+                </a>
               </li>
               <li>
-                <a href="/conditions-generales" class="hover:underline"
-                  >Conditions générales de ventes</a
-                >
+                <a href="/conditions-generales" class="hover:underline">
+                  Conditions générales de ventes
+                </a>
               </li>
             </ul>
           </div>

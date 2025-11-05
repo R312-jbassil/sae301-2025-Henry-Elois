@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
 if (Astro.locals.user) {
   return Astro.redirect("/");
 }
@@ -44,47 +45,59 @@ if (Astro.locals.user) {
             required
             class="input input-bordered"
           />
-          <button type="submit" class="btn btn-primary w-full"
-            >Se connecter</button
-          >
+          <button type="submit" class="btn btn-primary w-full">
+            Se connecter
+          </button>
         </form>
         <p id="status" class="mt-4 text-center text-error"></p>
 
-        <button class="btn btn-outline w-full" disabled
-          >Se connecter avec un compte Google</button
-        >
-        <a href="/signup" class="text-center text-gray-500 text-sm mt-2"
-          >Je n'ai pas de compte, je m'inscris</a
-        >
+        <button class="btn btn-outline w-full" disabled>
+          Se connecter avec un compte Google
+        </button>
+        <a href="/signup" class="text-center text-gray-500 text-sm mt-2">
+          Je n'ai pas de compte, je m'inscris
+        </a>
       </div>
     </div>
   </main>
 </Layout>
+
 <script>
-  //@ts-nocheck
-  localStorage.removeItem("user");
-  const form = document.getElementById("login-form");
-  const status = document.getElementById("status");
+  const form = document.getElementById("login-form") as HTMLFormElement;
+  const status = document.getElementById("status") as HTMLParagraphElement;
+
   if (form && status) {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
+      status.textContent = "Connexion en cours...";
+
       const formData = new FormData(form);
-      const res = await fetch("/api2/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: formData.get("email"),
-          password: formData.get("password"),
-        }),
-        credentials: "include",
-      });
-      if (res.ok) {
-        const resData = await res.json();
-        localStorage.setItem("user", JSON.stringify(resData.user));
-        status.textContent = "✅ Connexion réussie !";
-        window.location.href = "/personnalisation";
-      } else {
-        status.textContent = "❌ Email ou mot de passe invalide";
+
+      try {
+        const res = await fetch("/api2/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.get("email"),
+            password: formData.get("password"),
+          }),
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          status.textContent = "✅ Connexion réussie !";
+          status.classList.remove("text-error");
+          status.classList.add("text-success");
+          window.location.href = "/personnalisation";
+        } else {
+          status.textContent =
+            "❌ " + (data.error || "Email ou mot de passe invalide");
+          status.classList.add("text-error");
+        }
+      } catch (error) {
+        status.textContent = "❌ Erreur de connexion. Réessayez.";
+        status.classList.add("text-error");
       }
     });
   }

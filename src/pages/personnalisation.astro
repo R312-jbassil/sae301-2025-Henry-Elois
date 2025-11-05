@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-
 const pb = Astro.locals.pb;
 let materiaux = [];
 let couleurs = ["#000000", "#8B4513", "#E0E0E0", "#1E3A5F", "#556B2F"];
@@ -12,7 +11,7 @@ try {
 }
 ---
 
-<Layout title="Personnalisation - TaVue">
+<Layout title="Personnalisation - TaVue" pb={pb}>
   <section class="py-8">
     <div class="text-center mb-8">
       <h1 class="text-4xl font-bold mb-2">Créez vos lunettes</h1>
