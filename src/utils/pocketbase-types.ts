@@ -11,7 +11,6 @@ export enum Collections {
   Mfas = "_mfas",
   Otps = "_otps",
   Superusers = "_superusers",
-  SvgCollection = "svg_collection",
   Users = "users",
 }
 

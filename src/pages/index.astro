@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 
 const pb = Astro.locals.pb;
+pb.authStore.loadFromCookie(Astro.request.headers.get("cookie") || "");
 
 let lunettesPopulaires = [];
 try {

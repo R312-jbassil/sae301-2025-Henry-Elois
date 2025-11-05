@@ -1,381 +1,445 @@
 ---
 import Layout from "../layouts/Layout.astro";
 
-
 const pb = Astro.locals.pb;
-let user = null;
 let materiaux = [];
 let couleurs = ["#000000", "#8B4513", "#E0E0E0", "#1E3A5F", "#556B2F"];
 try {
-  user = pb.authStore.model;
   const result = await pb.collection("materiau").getList(1, 50);
   materiaux = result.items;
 } catch (error) {
   console.error("Erreur:", error);
 }
-const isConnected = !!user;
-
 ---
 
-<Layout title="Créez vos lunettes - TaVue">
-  {isConnected ? (
-    <section class="py-8">
-      <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold mb-2">Créez vos lunettes</h1>
-        <p class="text-gray-600">
-          Personnalisez chaque détail de vos lunettes. Fabrication française, design épuré.
-        </p>
-      </div>
-
-      <div class="alert alert-info mb-8 flex items-center gap-2">
-        <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+<Layout title="Personnalisation - TaVue">
+  <section class="py-8">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold mb-2">Créez vos lunettes</h1>
+      Personnalisez chaque détail de vos lunettes. Fabrication française, Personnalisez
+      chaque détail de vos lunettes. Fabrication française, design épuré.
+    </div>
+    <div class="alert alert-warning mb-8 flex items-center gap-2">
+      <svg
+        class="w-5 h-5 text-gray-600"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span
+        >Connectez-vous pour sauvegarder vos créations et passer commande.</span
+      >
+    </div>
+  </section>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+    <div
+      class="bg-white rounded-xl p-8 flex flex-col items-center border shadow-sm sticky top-24 self-start"
+      style="max-height: calc(100vh - 6rem); overflow: auto;"
+    >
+      <div class="w-full flex justify-center mb-6">
+        <svg
+          id="lunettes-svg"
+          width="406"
+          height="157"
+          viewBox="0 0 406 157"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            id="branche-droite"
+            d="M5.85635 43.1428C5.85635 43.1428 55.2063 37.5728 60.7863 34.3828C66.3663 31.1928 71.9263 26.4228 80.2863 24.8328C88.6463 23.2428 144.766 13.6928 144.766 13.6928C144.766 13.6928 151.926 11.7028 162.276 19.2628C172.626 26.8228 195.316 51.1028 201.676 50.3128C208.046 49.5128 211.226 40.7628 209.236 36.7828C207.246 32.8028 168.566 4.0328 161.876 2.1528C152.346 -0.527197 139.986 -0.237198 124.856 2.1528C109.736 4.5428 8.63635 25.4928 8.63635 25.4928C8.63635 25.4928 -4.49365 31.6128 5.84635 43.1528L5.85635 43.1428Z"
+            fill="#D7D7D7"
+            stroke="#DDDDDB"
+            stroke-width="0.5"
+            stroke-miterlimit="10"></path>
+          <path
+            id="branche-gauche"
+            d="M271.816 67.6529L362.356 37.8729C362.356 37.8729 384.486 32.2429 387.706 33.8529C390.926 35.4629 405.416 64.4329 405.416 67.6529C405.416 70.8729 402.996 81.6629 399.786 82.5429C397.456 83.1829 394.456 82.6529 392.946 78.3329C391.536 74.3129 386.106 46.6029 380.476 46.8629C374.846 47.1229 329.776 62.8129 329.776 62.8129C329.776 62.8129 316.496 69.2529 310.866 74.0829C305.236 78.9129 278.676 85.3529 278.676 85.3529C278.676 85.3529 269.016 77.7029 271.836 67.6429L271.816 67.6529Z"
+            fill="#D7D7D7"
+            stroke="#DDDDDB"
+            stroke-width="0.5"
+            stroke-miterlimit="10"></path>
+          <g style="mix-blend-mode:multiply">
+            <path
+              id=""
+              d="M205.266 38.7628C205.266 38.7628 204.956 44.9128 201.286 44.3328C196.316 43.5528 165.466 10.5028 155.116 12.0928C155.116 12.0928 163.646 14.8028 173.576 23.7328C180.086 29.5928 207.996 61.5828 205.266 38.7628Z"
+              fill="#E5DCDC"></path>
+          </g>
+          <g style="mix-blend-mode:multiply">
+            <path
+              d="M278.366 68.1028C278.366 68.1028 380.636 32.9128 386.216 36.1128C386.216 36.1128 368.016 38.6028 344.456 47.9928C320.896 57.3828 278.366 70.0228 278.366 70.0228V68.1028Z"
+              fill="#E5DCDC"></path>
+          </g>
+          <g style="mix-blend-mode:multiply">
+            <path
+              d="M382.386 46.0628C382.386 46.0628 385.646 46.0628 387.366 49.5128C389.086 52.9628 397.136 74.2228 397.136 74.2228C397.136 74.2228 397.906 79.2028 402.306 71.5428C402.306 71.5428 399.236 81.1028 396.946 78.3328C394.656 75.5628 387.176 52.0028 387.176 52.0028C387.176 52.0028 384.306 45.2628 382.386 46.0628Z"
+              fill="#E5DCDC"></path>
+          </g>
+          <path
+            id="verres"
+            d="M282.336 68.8128C282.096 65.4028 272.766 63.5928 269.626 62.4128C266.486 61.2328 253.926 64.3728 253.926 64.3728C241.756 61.2328 199.376 55.3428 175.046 55.3428C150.716 55.3428 142.476 66.7228 139.726 66.3328C136.976 65.9428 122.456 65.5528 116.176 64.3728C109.896 63.1928 111.076 50.2428 76.9264 37.8928C42.7864 25.5428 8.63645 25.4728 8.63645 25.4728C-4.71355 30.1328 1.87645 43.9628 1.87645 43.9628L3.92646 50.3128C8.24646 52.3428 7.06645 60.8328 8.63645 73.3928C10.2065 85.9528 16.0965 102.043 22.7665 111.853C29.4365 121.663 54.5564 132.653 67.1164 133.043C79.6764 133.433 90.6665 131.083 98.9065 117.733C107.146 104.393 115.786 80.8428 115.786 80.8428L125.986 82.4128C125.986 82.4128 128.896 82.7228 131.336 85.5028C133.776 88.2828 135.766 93.5328 138.936 102.813C146.496 124.913 164.056 142.063 164.056 142.063C164.056 142.063 169.656 149.493 197.496 154.723C220.576 159.063 240.196 152.263 240.196 152.263C257.916 145.093 261.826 107.303 261.826 107.303C261.826 107.303 263.656 94.0028 269.636 90.6528C277.006 86.5128 277.906 86.2128 282.346 85.3328C285.956 84.6228 282.586 72.2028 282.346 68.7928L282.336 68.8128ZM87.5265 119.323C78.1065 124.423 55.3465 126.383 41.2165 115.403C27.0865 104.413 20.4165 85.1828 18.4565 62.4228C16.4965 39.6628 25.5565 37.1928 25.5565 37.1928C25.5565 37.1928 40.4365 36.5228 59.6665 41.2228C78.8965 45.9328 100.086 59.2728 100.486 67.9128C100.876 76.5428 96.9564 114.223 87.5364 119.323H87.5265ZM241.756 143.653C232.726 147.973 220.286 148.363 209.826 147.573C199.366 146.793 172.286 146.003 162.476 116.173C162.476 116.173 159.726 102.043 157.376 98.9028C155.026 95.7628 147.956 84.4228 147.956 80.4728C147.956 72.2428 155.106 67.5028 155.106 67.5028C155.106 67.5028 163.266 62.4028 173.856 62.4028C184.456 62.4028 238.606 65.1528 246.066 75.3528C253.526 85.5528 253.126 97.3328 254.306 106.753C255.486 116.173 250.776 139.323 241.746 143.643L241.756 143.653Z"
+            fill="black"
+            stroke="#DDDDDB"
+            stroke-width="0.5"
+            stroke-miterlimit="10"></path>
         </svg>
-        <span>Connectez-vous pour sauvegarder vos créations et passer commande.</span>
       </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div class="bg-base-100 rounded-xl p-8 flex flex-col items-center justify-center shadow-xl border">
-          <img src="/lunettesbien.svg" alt="Aperçu lunettes personnalisées" class="w-full max-w-md drop-shadow-lg mb-6" />
-          <div class="text-sm text-gray-600 w-full">
-            <table class="table w-full">
-              <tbody>
-                <tr>
-                  <td class="font-bold">Matière</td>
-                  <td id="display-materiau">Acétate</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">Couleur</td>
-                  <td id="display-couleur">Black</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">Verres</td>
-                  <td id="display-verres">Clear</td>
-                </tr>
-                <tr>
-                  <td class="font-bold">Branches</td>
-                  <td id="display-branches">Classic</td>
-                </tr>
-              </tbody>
-            </table>
-            <p class="text-xs mt-2 text-center">Fabriqué en France</p>
-          </div>
-          <div class="form-control mt-6 w-full">
-            <label class="label font-bold text-lg" for="nom-creation">Nom de votre création</label>
-            <input type="text" id="nom-creation" placeholder="Ma création TaVue" class="input input-bordered w-full" />
-          </div>
-          <div class="flex flex-col gap-2 w-full mt-4">
-            <button id="btn-sauvegarder" class="btn btn-primary w-full">
-              <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-              </svg>
-              Sauvegarder ma création
-            </button>
-            <button id="btn-acheter" class="btn btn-secondary w-full">Acheter les lunettes</button>
-          </div>
-        </div>
-
-        <div class="space-y-6">
-          ...existing code...
-        </div>
-      </div>
-    </section>
-  ) : (
-    <section class="py-16 text-center">
-      <div class="alert alert-error inline-block mx-auto">
-        <span>Vous devez être connecté pour personnaliser vos lunettes.</span>
-      </div>
-    </section>
-  )}
-</Layout>
-            placeholder="Ma création TaVue"
-            class="input input-bordered w-full"
-          />
-        </div>
-        <div class="flex flex-col gap-2 w-full mt-4">
-          <button id="btn-sauvegarder" class="btn btn-primary w-full">
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+      <div class="text-sm text-gray-700 w-full mb-6">
+        <table class="table w-full">
+          <tbody>
+            <tr
+              ><td class="font-bold">Matière</td><td id="display-materiau"
+                >Acétate</td
+              ></tr
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-              ></path>
-            </svg>
-            Sauvegarder ma création
-          </button>
-          <button id="btn-acheter" class="btn btn-secondary w-full"
-            >Acheter les lunettes</button
-          >
-        </div>
+            <tr
+              ><td class="font-bold">Couleur</td><td id="display-couleur"
+                >Black</td
+              ></tr
+            >
+            <tr
+              ><td class="font-bold">Verres</td><td id="display-verres"
+                >Clear</td
+              ></tr
+            >
+            <tr
+              ><td class="font-bold">Branches</td><td id="display-branches"
+                >Classic</td
+              ></tr
+            >
+          </tbody>
+        </table>
+        <p class="text-xs text-center mt-10 mb-10">Fabriqué en France</p>
       </div>
-
-      <div class="space-y-6">
-        <div>
-          <h3 class="font-bold text-lg mb-4">Matière de la monture</h3>
-          <div class="space-y-3">
-            {
-              materiaux.map((materiau) => (
-                <label class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer hover:bg-base-300 transition">
-                  <input
-                    type="radio"
-                    name="materiau"
-                    value={materiau.id}
-                    class="radio radio-primary"
-                    data-libelle={materiau.libelle}
-                  />
-                  <div>
-                    <div class="font-bold">{materiau.libelle}</div>
-                    <div class="text-sm text-gray-600">Élégant et raffiné</div>
+      <div class="form-control w-full mb-4">
+        <label class="label font-bold" for="nom-creation"
+          >Nom de votre création</label
+        >
+        <input
+          type="text"
+          id="nom-creation"
+          placeholder="Ma création TaVue"
+          class="input input-bordered w-full"
+        />
+      </div>
+      <div class="flex flex-col gap-2 w-full">
+        <button
+          id="btn-sauvegarder"
+          class="btn btn-block btn-neutral text-white"
+        >
+          <svg
+            class="w-5 h-5 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
+            ></path>
+          </svg>
+          Sauvegarder ma création
+        </button>
+        <button id="btn-acheter" class="btn btn-block btn-neutral text-white"
+          >Acheter les lunettes</button
+        >
+      </div>
+    </div>
+    <div class="flex flex-col gap-8">
+      <div>
+        <h3 class="font-bold text-lg mb-4">Matière de la monture</h3>
+        <div class="flex flex-col gap-3">
+          {
+            materiaux.map((materiau) => (
+              <label class="flex items-center gap-3 p-4 bg-base-100 rounded-full cursor-pointer border hover:bg-base-200 transition">
+                <input
+                  type="radio"
+                  name="materiau"
+                  value={materiau.id}
+                  class="radio radio-primary"
+                  data-libelle={materiau.libelle}
+                />
+                <div>
+                  <div class="font-bold">{materiau.libelle}</div>
+                  <div class="text-sm text-gray-600">
+                    {materiau.description || ""}
                   </div>
-                </label>
-              ))
-            }
-          </div>
+                </div>
+              </label>
+            ))
+          }
         </div>
-
-        <div>
-          <h3 class="font-bold text-lg mb-4">Couleur de la monture</h3>
-          <div class="grid grid-cols-5 gap-3">
-            {
-              couleurs.map((couleur, index) => (
-                <label class="cursor-pointer">
-                  <input
-                    type="radio"
-                    name="couleur"
-                    value={couleur}
-                    class="hidden couleur-radio"
-                  />
-                  <div
-                    class="w-full aspect-square rounded-lg border-2 border-gray-300 hover:border-black transition"
-                    style={`background-color: ${couleur}`}
-                  />
-                </label>
-              ))
-            }
-          </div>
+      </div>
+      <div>
+        <h3 class="font-bold text-lg mb-4">Couleur de la monture</h3>
+        <div class="flex flex-col gap-3">
+          {
+            couleurs.map((couleur, index) => (
+              <label class="flex items-center gap-3 p-4 bg-base-100 rounded-full cursor-pointer border hover:bg-base-200 transition">
+                <input
+                  type="radio"
+                  name="couleur"
+                  value={couleur}
+                  class="radio radio-primary"
+                />
+                <div
+                  class="w-6 h-6 rounded border"
+                  style={`background-color: ${couleur}`}
+                />
+                <span class="font-bold text-sm">
+                  {couleur === "#000000"
+                    ? "Noir"
+                    : couleur === "#8B4513"
+                      ? "Écaille"
+                      : couleur === "#E0E0E0"
+                        ? "Transparent"
+                        : couleur === "#1E3A5F"
+                          ? "Bleu marine"
+                          : couleur === "#556B2F"
+                            ? "Olive"
+                            : couleur}
+                </span>
+              </label>
+            ))
+          }
         </div>
-
-        <div>
-          <h3 class="font-bold text-lg mb-4">Taille des verres</h3>
-          <div class="space-y-3">
-            <label
-              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="taille-verres"
-                value="100"
-                class="radio radio-primary"
-              />
-              <div>5cm de diamètre</div>
-            </label>
-            <label
-              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="taille-verres"
-                value="120"
-                class="radio radio-primary"
-                checked
-              />
-              <div>6cm de diamètre</div>
-            </label>
-            <label
-              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="taille-verres"
-                value="140"
-                class="radio radio-primary"
-              />
-              <div>7cm de diamètre</div>
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <h3 class="font-bold text-lg mb-4">Style des branches</h3>
-          <div class="space-y-3">
-            <label
-              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="style-branches"
-                value="classic"
-                class="radio radio-primary"
-                checked
-              />
-              <div>
-                <div class="font-bold">Classique</div>
-                <div class="text-sm text-gray-600">Droit et épuré</div>
-              </div>
-            </label>
-            <label
-              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="style-branches"
-                value="courbe"
-                class="radio radio-primary"
-              />
-              <div>
-                <div class="font-bold">Courbé</div>
-                <div class="text-sm text-gray-600">Ergonomique et moderne</div>
-              </div>
-            </label>
-            <label
-              class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer"
-            >
-              <input
-                type="radio"
-                name="style-branches"
-                value="flexible"
-                class="radio radio-primary"
-              />
-              <div>
-                <div class="font-bold">Flexible</div>
-                <div class="text-sm text-gray-600">Confort maximal</div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <div>
-          <label class="block font-bold text-lg mb-2"
-            >Nom de votre création</label
+      </div>
+      <div>
+        <h3 class="font-bold text-lg mb-4">Taille des verres</h3>
+        <div class="flex flex-col gap-3">
+          <label
+            class="flex items-center gap-3 p-4 bg-base-100 rounded-full cursor-pointer border hover:bg-base-200 transition"
           >
-          <input
-            type="text"
-            id="nom-creation"
-            placeholder="Ma création TaVue"
-            class="input input-bordered w-full"
-          />
+            <input
+              type="radio"
+              name="taille-verres"
+              value="100"
+              class="radio radio-primary"
+            />
+            <span>5cm de diamètre</span>
+          </label>
+          <label
+            class="flex items-center gap-3 p-4 bg-base-100 rounded-full cursor-pointer border hover:bg-base-200 transition"
+          >
+            <input
+              type="radio"
+              name="taille-verres"
+              value="120"
+              class="radio radio-primary"
+              checked
+            />
+            <span>6cm de diamètre</span>
+          </label>
+          <label
+            class="flex items-center gap-3 p-4 bg-base-100 rounded-full cursor-pointer border hover:bg-base-200 transition"
+          >
+            <input
+              type="radio"
+              name="taille-verres"
+              value="140"
+              class="radio radio-primary"
+            />
+            <span>7cm de diamètre</span>
+          </label>
         </div>
-
-        <div class="flex gap-4">
-          <button id="btn-sauvegarder" class="btn btn-primary flex-1">
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-              ></path>
-            </svg>
-            Sauvegarder ma création
-          </button>
-          <button id="btn-acheter" class="btn btn-secondary flex-1">
-            Acheter les lunettes
-          </button>
+      </div>
+      <div>
+        <h3 class="font-bold text-lg mb-4">Style des branches</h3>
+        <div class="flex flex-col gap-3">
+          <label
+            class="flex items-center gap-3 p-4 bg-base-100 rounded-full cursor-pointer border hover:bg-base-200 transition"
+          >
+            <input
+              type="radio"
+              name="style-branches"
+              value="classic"
+              class="radio radio-primary"
+              checked
+            />
+            <div>
+              <div class="font-bold">Classique</div>
+              <div class="text-sm text-gray-600">Droit et épuré</div>
+            </div>
+          </label>
+          <label
+            class="flex items-center gap-3 p-4 bg-base-100 rounded-full cursor-pointer border hover:bg-base-200 transition"
+          >
+            <input
+              type="radio"
+              name="style-branches"
+              value="courbe"
+              class="radio radio-primary"
+            />
+            <div>
+              <div class="font-bold">Courbé</div>
+              <div class="text-sm text-gray-600">Ergonomique et moderne</div>
+            </div>
+          </label>
+          <label
+            class="flex items-center gap-3 p-4 bg-base-100 rounded-full cursor-pointer border hover:bg-base-200 transition"
+          >
+            <input
+              type="radio"
+              name="style-branches"
+              value="flexible"
+              class="radio radio-primary"
+            />
+            <div>
+              <div class="font-bold">Flexible</div>
+              <div class="text-sm text-gray-600">Confort maximal</div>
+            </div>
+          </label>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</Layout>
 
-  <script>
-    // Fonction pour mettre à jour le SVG
-    function updateSVG() {
-      const couleur =
-        document.querySelector('input[name="couleur"]:checked')?.value ||
-        "#000000";
-      const tailleVerres =
-        document.querySelector('input[name="taille-verres"]:checked')?.value ||
-        "120";
-      const styleBranches =
-        document.querySelector('input[name="style-branches"]:checked')?.value ||
-        "classic";
-      const materiau =
-        document.querySelector('input[name="materiau"]:checked')?.dataset
-          .libelle || "Acétate";
+{
+  materiaux.map((materiau) => (
+    <label class="flex items-center gap-3 p-4 bg-base-200 rounded-lg cursor-pointer hover:bg-base-300 transition">
+      <input
+        type="radio"
+        name="materiau"
+        value={materiau.id}
+        class="radio radio-primary"
+        data-libelle={materiau.libelle}
+      />
+      <div>
+        <div class="font-bold">{materiau.libelle}</div>
+        <div class="text-sm text-gray-600">Élégant et raffiné</div>
+      </div>
+    </label>
+  ))
+}
 
-      // Mettre à jour les couleurs
-      document
-        .querySelectorAll("#lunettes-svg rect, #lunettes-svg line")
-        .forEach((el) => {
-          el.setAttribute("stroke", couleur);
+<script>
+  function updateSVG() {
+    // Couleur monture uniquement
+    const couleurInput = document.querySelector(
+      'input[name="couleur"]:checked'
+    );
+    const couleur =
+      couleurInput && "value" in couleurInput ? couleurInput.value : "#000000";
+    const monture = document.getElementById("verres");
+    if (monture) monture.setAttribute("fill", couleur);
+
+    // Taille des verres (scale sur le path verres)
+    const tailleInput = document.querySelector(
+      'input[name="taille-verres"]:checked'
+    );
+    const tailleVerres =
+      tailleInput && "value" in tailleInput ? tailleInput.value : "120";
+    const verres = document.getElementById("verres");
+    let scaleVerres = 1;
+    if (tailleVerres === "100") scaleVerres = 0.92;
+    else if (tailleVerres === "140") scaleVerres = 1.08;
+    if (verres)
+      verres.setAttribute(
+        "transform",
+        `scale(${scaleVerres}) translate(${(1 - scaleVerres) * 203},${(1 - scaleVerres) * 78})`
+      );
+
+    // Longueur des branches (scaleX sur les deux branches)
+    const styleInput = document.querySelector(
+      'input[name="style-branches"]:checked'
+    );
+    const styleBranches =
+      styleInput && "value" in styleInput ? styleInput.value : "classic";
+    let scaleBranches = 1;
+    if (styleBranches === "courbe") scaleBranches = 1.08;
+    else if (styleBranches === "flexible") scaleBranches = 1.16;
+    const brancheGauche = document.getElementById("branche-gauche");
+    const brancheDroite = document.getElementById("branche-droite");
+    if (brancheGauche)
+      brancheGauche.setAttribute("transform", `scale(${scaleBranches},1)`);
+    if (brancheDroite)
+      brancheDroite.setAttribute("transform", `scale(${scaleBranches},1)`);
+
+    // Mettre à jour l'affichage des infos
+    const materiauInput = document.querySelector(
+      'input[name="materiau"]:checked'
+    );
+    let materiau = "Acétate";
+    if (materiauInput && "dataset" in materiauInput)
+      materiau = materiauInput.dataset.libelle || "Acétate";
+    const displayMateriau = document.getElementById("display-materiau");
+    const displayCouleur = document.getElementById("display-couleur");
+    const displayVerres = document.getElementById("display-verres");
+    const displayBranches = document.getElementById("display-branches");
+    if (displayMateriau) displayMateriau.textContent = materiau;
+    if (displayCouleur) displayCouleur.textContent = couleur;
+    if (displayVerres) displayVerres.textContent = tailleVerres + "px";
+    if (displayBranches) displayBranches.textContent = styleBranches;
+  }
+
+  document.querySelectorAll('input[type="radio"]').forEach((input) => {
+    input.addEventListener("change", updateSVG);
+  });
+  window.addEventListener("DOMContentLoaded", updateSVG);
+
+  // Sauvegarder la création
+  const btnSauvegarder = document.getElementById("btn-sauvegarder");
+  if (btnSauvegarder) {
+    btnSauvegarder.addEventListener("click", async () => {
+      const svgElement = document.getElementById("lunettes-svg");
+      const svgCode = svgElement ? svgElement.outerHTML : "";
+      const nomInput = document.getElementById(
+        "nom-creation"
+      ) as HTMLInputElement | null;
+      const nom = nomInput && nomInput.value ? nomInput.value : "Ma création";
+
+      const couleurInput = document.querySelector(
+        'input[name="couleur"]:checked'
+      ) as HTMLInputElement | null;
+      const tailleInput = document.querySelector(
+        'input[name="taille-verres"]:checked'
+      ) as HTMLInputElement | null;
+      const materiauInput = document.querySelector(
+        'input[name="materiau"]:checked'
+      ) as HTMLInputElement | null;
+
+      const data = {
+        nom,
+        code_svg: svgCode,
+        couleur_lunettes: couleurInput ? couleurInput.value : "#000000",
+        taille_verres: tailleInput ? tailleInput.value : "120",
+        id_materiau: materiauInput ? materiauInput.value : "",
+      };
+
+      try {
+        // Essaye d'abord la route Pocketbase standard
+        let response = await fetch("/api2/lunettes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
         });
-
-      // Mettre à jour la taille des verres
-      const verreGauche = document.getElementById("verre-gauche");
-      const verreDroit = document.getElementById("verre-droit");
-      verreGauche.setAttribute("width", tailleVerres);
-      verreDroit.setAttribute("width", tailleVerres);
-
-      // Mettre à jour les branches selon le style
-      const brancheGauche = document.getElementById("branche-gauche");
-      const brancheDroite = document.getElementById("branche-droite");
-
-      if (styleBranches === "courbe") {
-        brancheGauche.setAttribute("d", "M40,75 Q25,75 10,85");
-        brancheDroite.setAttribute("d", "M360,75 Q375,75 390,85");
-      } else {
-        brancheGauche.setAttribute("x1", "40");
-        brancheDroite.setAttribute("x1", "360");
-      }
-
-      // Mettre à jour l'affichage des infos
-      document.getElementById("display-materiau").textContent = materiau;
-      document.getElementById("display-couleur").textContent = couleur;
-      document.getElementById("display-verres").textContent =
-        tailleVerres + "px";
-      document.getElementById("display-branches").textContent = styleBranches;
-    }
-
-    // Écouter les changements
-    document.querySelectorAll('input[type="radio"]').forEach((input) => {
-      input.addEventListener("change", updateSVG);
-    });
-
-    // Sauvegarder la création
-    document
-      .getElementById("btn-sauvegarder")
-      .addEventListener("click", async () => {
-        const svgElement = document.getElementById("lunettes-svg");
-        const svgCode = svgElement.outerHTML;
-        const nom = document.getElementById("nom-creation").value;
-
-        const data = {
-          nom: nom || "Ma création",
-          code_svg: svgCode,
-          couleur_lunettes: document.querySelector(
-            'input[name="couleur"]:checked'
-          )?.value,
-          taille_verres: document.querySelector(
-            'input[name="taille-verres"]:checked'
-          )?.value,
-          id_materiau: document.querySelector('input[name="materiau"]:checked')
-            ?.value,
-        };
-
-        try {
-          const response = await fetch("/api/saveSVG", {
+        if (response.status === 404) {
+          // Fallback sur l'ancienne route custom si 404
+          response = await fetch("/api2/saveSVG", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
           });
-
-          if (response.ok) {
-            alert("Création sauvegardée !");
-          }
-        } catch (error) {
-          console.error("Erreur:", error);
-          alert("Erreur lors de la sauvegarde");
         }
-      });
-  </script>
-</Layout>
+        if (response.ok) {
+          alert("Création sauvegardée !");
+        } else {
+          const errText = await response.text();
+          alert("Erreur Pocketbase: " + errText);
+        }
+      } catch (error) {
+        console.error("Erreur:", error);
+        alert("Erreur lors de la sauvegarde");
+      }
+    });
+  }
+</script>

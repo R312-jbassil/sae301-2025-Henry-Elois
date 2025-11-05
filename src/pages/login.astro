@@ -6,86 +6,86 @@ if (Astro.locals.user) {
 ---
 
 <Layout title="Page de connexion">
-
-      <main class="flex-1 flex items-center justify-center w-full">
-        <div class="mt-35 card w-full max-w-md shadow-xl bg-base-100 border">
-          <div class="card-body items-center">
-            <div class="flex flex-col items-center mb-4">
-              <div class="flex gap-2 mb-2">
-                <div
-                  class="w-10 h-10 bg-black rounded-full flex items-center justify-center"
-                >
-                  <span class="text-white text-sm font-bold">Ta</span>
-                </div>
-                <div
-                  class="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center"
-                >
-                  <span class="text-black text-sm font-bold">Vue</span>
-                </div>
-              </div>
-              <h1 class="text-2xl font-bold mb-1">Bienvenue sur TaVue</h1>
-              <p class="text-gray-600 text-center text-sm">
-                Connectez-vous pour personnaliser vos lunettes.
-              </p>
+  <main class="flex-1 flex items-center justify-center w-full">
+    <div class="mt-35 card w-full max-w-md shadow-xl bg-base-100 border">
+      <div class="card-body items-center">
+        <div class="flex flex-col items-center mb-4">
+          <div class="flex gap-2 mb-2">
+            <div
+              class="w-10 h-10 bg-black rounded-full flex items-center justify-center"
+            >
+              <span class="text-white text-sm font-bold">Ta</span>
             </div>
-            <div class="w-full border-b mb-4"></div>
-            <form id="login-form" class="flex flex-col gap-4 w-full">
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-                class="input input-bordered"
-              />
-              <input
-                type="password"
-                name="password"
-                placeholder="Mot de passe"
-                required
-                class="input input-bordered"
-              />
-              <button type="submit" class="btn btn-primary w-full"
-                >Se connecter</button
-              >
-            </form>
-
-              <button class="btn btn-outline w-full" disabled
-                >Se connecter avec un compte Google</button
-              >
-              <a href="/signup" class="text-center text-gray-500 text-sm mt-2"
-                >Je n'ai pas de compte, je m'inscris</a
-              >
+            <div
+              class="w-10 h-10 border-2 border-black rounded-full flex items-center justify-center"
+            >
+              <span class="text-black text-sm font-bold">Vue</span>
             </div>
           </div>
+          <h1 class="text-2xl font-bold mb-1">Bienvenue sur TaVue</h1>
+          <p class="text-gray-600 text-center text-sm">
+            Connectez-vous pour personnaliser vos lunettes.
+          </p>
         </div>
-      </main>
-      <script>
-        //@ts-nocheck
-        localStorage.removeItem("user");
-        const form = document.getElementById("login-form");
-        const status = document.getElementById("status");
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          const formData = new FormData(form);
-          const res = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: formData.get("email"),
-              password: formData.get("password"),
-            }),
-            credentials: "include",
-          });
-          if (res.ok) {
-            const resData = await res.json();
-            localStorage.setItem("user", JSON.stringify(resData.user));
-            status.textContent = "✅ Connexion réussie !";
-            window.location.href = "/";
-          } else {
-            status.textContent = " Email ou mot de passe invalide";
-          }
-        });
-      </script>
-    </body>
-  </html>
+        <div class="w-full border-b mb-4"></div>
+
+        <form id="login-form" class="flex flex-col gap-4 w-full">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            required
+            class="input input-bordered"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Mot de passe"
+            required
+            class="input input-bordered"
+          />
+          <button type="submit" class="btn btn-primary w-full"
+            >Se connecter</button
+          >
+        </form>
+        <p id="status" class="mt-4 text-center text-error"></p>
+
+        <button class="btn btn-outline w-full" disabled
+          >Se connecter avec un compte Google</button
+        >
+        <a href="/signup" class="text-center text-gray-500 text-sm mt-2"
+          >Je n'ai pas de compte, je m'inscris</a
+        >
+      </div>
+    </div>
+  </main>
 </Layout>
+<script>
+  //@ts-nocheck
+  localStorage.removeItem("user");
+  const form = document.getElementById("login-form");
+  const status = document.getElementById("status");
+  if (form && status) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const res = await fetch("/api2/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.get("email"),
+          password: formData.get("password"),
+        }),
+        credentials: "include",
+      });
+      if (res.ok) {
+        const resData = await res.json();
+        localStorage.setItem("user", JSON.stringify(resData.user));
+        status.textContent = "✅ Connexion réussie !";
+        window.location.href = "/personnalisation";
+      } else {
+        status.textContent = "❌ Email ou mot de passe invalide";
+      }
+    });
+  }
+</script>
