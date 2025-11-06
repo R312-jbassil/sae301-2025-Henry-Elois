@@ -1,0 +1,6 @@
+https://github.com/R312-jbassil/sae301-2025-Henry-Elois
+
+
+
+login de connexion à pocketbase : elois.henry@edu.univ-fcomte.fr
+mot de passe pocketbase : 1234567890
