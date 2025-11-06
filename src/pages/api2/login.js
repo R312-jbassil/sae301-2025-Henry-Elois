@@ -1,35 +1,26 @@
-export const POST = async ({ request, locals }) => {
+export const POST = async ({ request, cookies, locals }) => {
   try {
-    console.log("🔍 [LOGIN] Requête reçue");
-
-    const body = await request.json();
-    console.log("📧 [LOGIN] Email :", body.email);
-
+    const { email, password } = await request.json();
     const pb = locals.pb;
-    console.log("🔧 [LOGIN] PocketBase dispo ?", !!pb);
-
-    if (!pb) {
-      throw new Error("PocketBase non initialisé dans locals");
-    }
-
     const authData = await pb
       .collection("users")
-      .authWithPassword(body.email, body.password);
-
-    console.log("✅ [LOGIN] Connexion réussie pour :", body.email);
-
+      .authWithPassword(email, password);
     return new Response(
-      JSON.stringify({ success: true, user: authData.record }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+      JSON.stringify({
+        success: true,
+        user: authData.record,
+      }),
+      {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }
     );
   } catch (err) {
-    console.error("❌ [LOGIN] Erreur :", err.message);
-    console.error("📍 Détails complets :", err);
-
+    console.error("Erreur de connexion :", err);
     return new Response(
       JSON.stringify({
         success: false,
-        error: err?.data?.message || err.message || "Erreur inconnue",
+        error: err?.data?.message || "Email ou mot de passe invalide.",
       }),
       { status: 401, headers: { "Content-Type": "application/json" } }
     );
