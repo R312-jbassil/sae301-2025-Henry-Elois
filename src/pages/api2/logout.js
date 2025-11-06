@@ -5,7 +5,7 @@ export const POST = async ({ locals, cookies }) => {
   return new Response(null, {
     status: 303,
     headers: {
-      Location: "https://tavue.eloishenry.fr",
+      Location: "/",
     },
   });
 };

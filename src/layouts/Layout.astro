@@ -54,11 +54,10 @@ const isAuthenticated = !!user;
                 <span class="text-sm hidden md:block">
                   Bonjour, {user.name || user.email}
                 </span>
-                <form method="post" action="/api2/logout">
-                  <button type="submit" class="btn btn-primary px-6">
-                    Déconnexion
-                  </button>
-                </form>
+
+                <button id="logout-btn" class="btn btn-primary px-6">
+                  Déconnexion
+                </button>
               </>
             ) : (
               <>
@@ -206,4 +205,12 @@ const isAuthenticated = !!user;
       </div>
     </footer>
   </body>
+  <script>
+    document
+      .getElementById("logout-btn")
+      ?.addEventListener("click", async () => {
+        await fetch("/api2/logout", { method: "POST", credentials: "include" });
+        window.location.href = "/";
+      });
+  </script>
 </html>
